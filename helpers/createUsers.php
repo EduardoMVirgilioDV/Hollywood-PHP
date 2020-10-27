@@ -12,26 +12,28 @@ if($_POST){
         $errors["email"] = "Correo Invalido";
     }
 
-    if($_FILES){
-        $avatar = $_FILES["avatar"];
-        $extension = end(explode("/", $avatar["type"]));
-        $permitidas = array("svg", "jpeg", "jpg", "png");
-        $tamaño = (int) ini_get('upload_max_filesize') * 1024;
-        if(!in_array($extension, $permitidas)){
-            $errors["avatar"] = "Extension no permitida";
-        }else if($avatar["size"] >= $tamaño){
-            $errors["avatar"] = "El archivo supera los ".ini_get('upload_max_filesize');
-        }else{
-            move_uploaded_file(dirname($avatar["name"]),"/uploads/avatars");
-            $file = $avatar["name"];
-        }
-    }
 
     if(count($errors) == 0){
-        $query = "INSERT INTO `Usuarios` (`email`, `clave`,`avatar`) VALUES ('".$email."','".$password."','".$file."')" ;
-        echo($query);
-        mysqli_query($database,$query);
-        header("Location:/hollywood/?view=login&&action=success&&msg=Usuario Registrado");
+
+        $usuarios = "SELECT * FROM `Usuarios` WHERE `email` ='".$email."'";
+        $consulta = mysqli_query($database,$usuarios);
+        $registrado = mysqli_num_rows($consulta) > 0? true: false;
+
+        if(!$registrado){
+            $query = "INSERT INTO `Usuarios` (`email`, `clave`,`avatar`) VALUES ('".$email."','".$password."','".$file."')" ;
+            echo($query);
+            mysqli_query($database,$query);
+            header("Location:?view=login&&action=success&&msg=Usuario Registrado");
+        }else{
+            $usuario = mysqli_fetch_assoc($consulta);
+            if($usuario["clave"] != $password){
+                header("Location:?view=login&&action=danger&&msg=Clave Incorrecta");
+            }else{
+                $_SESSION["usuario"] = $usuario;
+                $_SESSION["usuario"]["role"] = strpos($_SESSION["usuario"]["email"],"@hollywood") > 0 ? "admin" : "user";
+                header("Location:?view=login&&action=success&&msg=Usuario Ingresado");
+            }
+        }
     }
     
 
