@@ -1,17 +1,7 @@
 <?php
 include("helpers/createUsers.php");
 ?>
-<?php if (isset($_GET["action"])) { ?>
-    <div class="alert alert-<?=$_GET["action"]?>" role="alert">
-        <?=$_GET["msg"]?>
-    </div>
-<?php } ?>
 
-<?php if (isset($errors["email"])) { ?>
-    <div class="alert alert-danger" role="alert">
-        <?=$errors["email"]?>
-    </div>
-<?php } ?>
 
 <div class="container">
     <div class="row vh-100 align-items-center">

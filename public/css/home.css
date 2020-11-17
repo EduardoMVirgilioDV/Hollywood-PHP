@@ -1,0 +1,15 @@
+body {
+
+    background: rgb(105,20,230);
+    background: linear-gradient(90deg, rgba(105,20,230,1) 0%, rgba(150,50,250,1) 100%);
+
+}
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+}
+@media screen and (min-width:1024px) {
+    body{
+        overflow: hidden;
+    }
+}

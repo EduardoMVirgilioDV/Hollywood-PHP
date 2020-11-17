@@ -23,7 +23,7 @@ if($_POST){
             $query = "INSERT INTO `Usuarios` (`email`, `clave`,`avatar`) VALUES ('".$email."','".$password."','".$file."')" ;
             echo($query);
             mysqli_query($database,$query);
-            header("Location:?view=login&&action=success&&msg=Usuario Registrado");
+            header("Location:?view=home&&action=success&&msg=Usuario Registrado");
         }else{
             $usuario = mysqli_fetch_assoc($consulta);
             if($usuario["clave"] != $password){
@@ -31,7 +31,7 @@ if($_POST){
             }else{
                 $_SESSION["usuario"] = $usuario;
                 $_SESSION["usuario"]["role"] = strpos($_SESSION["usuario"]["email"],"@hollywood") > 0 ? "admin" : "user";
-                header("Location:?view=login&&action=success&&msg=Usuario Ingresado");
+                header("Location:?view=home&&action=success&&msg=Usuario Ingresado");
             }
         }
     }
